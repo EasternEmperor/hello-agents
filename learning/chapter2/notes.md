@@ -70,3 +70,5 @@ History: {history}
 # Reflection
 Reflection introduces a post-hoc self-correction mechanism for agents. Core workflow can be summarized by three concise loop: execute, reflect, and optimize.
 ## Cases Configuration and Memory Design
+
+## Cost And Gain

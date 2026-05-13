@@ -20,7 +20,7 @@ History: {history}
 
 from code4_2 import ToolExecutor
 from code4_1 import HelloAgentsLLM
-from code4_2 import search
+from code4_2 import search, calculator
 import re
 
 class ReActAgent:
@@ -68,7 +68,7 @@ class ReActAgent:
 
             # 4. 执行工具
             # 4.1 finish
-            if action.startswith("Finish"):
+            if action.startswith("Finish") or action.startswith("`Finish"):
                 # 提取答案并结束
                 final_answer = re.match(r"Finish\[(.*)\]", action).group(1)
                 print(f"最终答案: {final_answer}")
@@ -94,7 +94,7 @@ class ReActAgent:
             self.history.append(f"Observation: {observation}")
 
         # 本次问题结束
-        print("---当前步骤: 结束---")
+        print("\n---当前步骤: 结束---")
         return None
 
     def _parse_output(self, text: str):
@@ -123,5 +123,7 @@ if __name__ == '__main__':
     llm_client = HelloAgentsLLM()
     tool_executor = ToolExecutor()
     tool_executor.registerTool("search", "一个网页搜索引擎。当你需要回答关于时事、事实以及在你的知识库中找不到的信息时，应使用此工具。", search)
+    tool_executor.registerTool("calculator", "一个简单的计算器工具。当你需要计算数学表达式或算式时，应使用此工具。", calculator)
     agent = ReActAgent(llm_client=llm_client, tool_executor=tool_executor)
     agent.run("华为最新手机型号及主要卖点？")
+    agent.run("(100+12)×10÷3=?")

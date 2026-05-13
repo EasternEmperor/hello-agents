@@ -55,7 +55,28 @@ def search(query: str) -> str:
     except Exception as e:
         return f"搜索失败：{e}"
     
-
+import re, ast
+def calculator(query: str) -> str:
+    """
+    一个简单的计算器工具，如(123 + 456) × 789/ 12 = ?
+    """
+    print(f"🧮 正在计算算式结果: {query}")
+    try:
+        # 1. 解析算式
+        # 查找 = 号
+        formula = re.search(r'\s*(.*?)(?==)', query)
+        print(f"提取出算式: {formula}")
+        if not formula:
+            return "未找到算式"
+        formula = formula.group(1).strip()
+        # 2. 替换算式中运算符：✖️->*, ➗->/
+        formula = formula.replace("×", "*").replace("÷", "/")
+        # 3. 计算结果
+        print(f"计算公式: {formula}")
+        result = eval(formula)
+        return str(result)
+    except Exception as e:
+        return f"计算失败：{e}"
 
 from typing import Dict, Any
 
@@ -94,15 +115,30 @@ if __name__ == "__main__":
 
     # 2. 注册工具
     executor.registerTool("search", "一个网页搜索引擎。当你需要回答关于时事、事实以及在你的知识库中找不到的信息时，应使用此工具。", search)
+    executor.registerTool("calculator", "一个简单的计算器工具，如(123 + 456) × 789/ 12 = ?", calculator)
 
     # 3. 打印可用工具
     print("\n可用工具列表:")
     print(executor.getAvailableTools())
 
     # 4. 智能体的Action调用
+    # 4.1 search工具调用
     print("\n--- 执行 Action: Search['英伟达最新的GPU型号是什么'] ---")
     tool_name = "search"
     tool_input = "英伟达最新的GPU型号是什么"
+
+    tool_function = executor.getTool(tool_name)
+    if tool_function:
+        observation = tool_function(tool_input)
+        print("--- 观察 ---")
+        print(observation)
+    else:
+        print(f"工具 '{tool_name}' 未注册")
+
+    # 4.2 calculator工具调用
+    print("\n--- 执行 Action: Calculator['(123 + 456) × 789/ 12 = ?'] ---")
+    tool_name = "calculator"
+    tool_input = "(123 + 456) × 789/ 12 = ?"
 
     tool_function = executor.getTool(tool_name)
     if tool_function:
