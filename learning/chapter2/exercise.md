@@ -59,6 +59,6 @@
         3. query_policy(): query policy of the company.
         4. send_email(): send email to customer.
     - 如何设计提示词来确保智能体的决策既符合公司利益，又能保持对用户的友好态度？
-
+        The prompts can be designed with four layers: "policy priority + user experience constraints + risk control + structured output". The core is not to make the model "as user-friendly as possible", but to clearly tell it that refund decisions must be based on company policies and evidence; and that user opinions must be respected, transparent, and remediable.
     - 这个产品上线后可能面临哪些风险和挑战？如何通过技术手段来降低这些风险？
 
